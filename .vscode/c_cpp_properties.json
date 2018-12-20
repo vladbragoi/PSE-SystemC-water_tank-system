@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${SYSTEMC_HOME}/include"
+                "${SYSTEMC_HOME}/include",
+                "${SCAMS_HOME}/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
