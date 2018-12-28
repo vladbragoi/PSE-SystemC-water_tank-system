@@ -5,17 +5,26 @@
 #pragma once
 
 #include <systemc-ams.h>
-#include "define_AMS.h"
+#include "command.h"
 
 SCA_TDF_MODULE(valve)
 {
   public:
     sca_tdf::sca_in<int> command;
-    sca_tdf::sca_in<float> aperture_threshold;
-    sca_tdf::sca_out<float> valve_aperture;
+    sca_tdf::sca_in<double> aperture_threshold;
+    sca_tdf::sca_out<double> aperture;
 
-    void processing();
+    // valve(sc_core::sc_module_name);
+    // ~valve();
+
+    SCA_CTOR(valve)
+    {
+        aperture.write(0.7);
+        valve_aperture = 0;
+    }
+
+    void processing() override;
 
   private:
-    sca_core::sca_time time_step;
+    double valve_aperture;
 };

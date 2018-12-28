@@ -5,19 +5,24 @@
 #pragma once
 
 #include <systemc-ams.h>
-#include "define_AMS.h"
+#include "command.h"
 
 SC_MODULE(tank)
 {
   public:
-    sca_tdf::sca_in<float> valve_aperture; // feedbck control
-    sca_tdf::sca_out<float> water_level;
+    sca_tdf::sca_in<double> valve_aperture; // feedback control
+    sca_tdf::sca_out<double> water_level;
 
-    void processing();
+    tank(sc_core::sc_module_name);
 
-    sca_lsf::sca_tdf::sca_source input;
-    sca_lsf::sca_tdf::sca_sink output;
+    sca_lsf::sca_tdf::sca_source input_converter;
+    sca_lsf::sca_tdf::sca_sink output_converter;
+
+    sca_lsf::sca_sub sub;
+    sca_lsf::sca_integ water_integrator;
+    sca_lsf::sca_gain valve_gain;
+    sca_lsf::sca_gain water_gain;
 
   private:
-    sca_core::sca_time time_step;
+    sca_lsf::sca_signal x, x_derivative, a, sig1, sig2, sig3;
 };

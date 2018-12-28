@@ -1,3 +1,8 @@
+DESIGN_NAME=watertank
+ABSTRACTION_LEVEL=AMS
+
+EXECUTABLE=bin/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).x
+
 SYSTEMC_AMS=$$SCAMS_HOME
 SYSTEMC=$$SYSTEMC_HOME
 
@@ -22,85 +27,44 @@ LIBS = $(SCAMS_LIBDIR)/libsystemc-ams.a \
 	   $(SYSC_LIBDIR)/libsystemc.a \
 	   -lpthread
 
+LIBS = $(SCAMS_LIBDIR)/libsystemc-ams.a $(SYSC_LIBDIR)/libsystemc.a -lpthread
+
 INCDIR = -I./include/ -I. -I$(SYSTEMC)/include/ -I$(SYSTEMC_AMS)/include
 
 CXX=g++
 CFLAGS= -c
 LD=g++
 
-EXECUTABLE = main.x
+EXECUTABLE = bin/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).x
 
 all: $(EXECUTABLE)
 
-install: all
+$(EXECUTABLE): obj/main.o obj/controller.o obj/tank.o obj/valve.o
+	@echo Building $@
+	$(CXX) -g $(INCDIR) -o $@ $^ $(LIBS)
 
-$(EXECUTABLE): ./obj/bit_src.o \
-	   ./obj/ltf_nd_filter.o \
-	   ./obj/mixer_de.o \
-	   ./obj/mixer.o \
-	   ./obj/rectifier.o \
-	   ./obj/sampler.o \
-	   ./obj/sin_src.o \
-	   ./obj/eln_source.o \
-	   ./obj/lsf_in_tdf.o \
-	   ./obj/main.o
-	@echo Linking $@
-	@$(LD) $(LDFLAGS) -o $@ $^ $(LIBS)
-	
-#------------------------------------------------------------
-#---------------------------Main-----------------------------
-obj/main.o: main.cpp
-	@echo Compiling $@
+obj/main.o: src/main.cpp
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
-#------------------------------------------------------------
-#--------------------TDF Modules-----------------------------
-obj/bit_src.o: tdf/bit_src.cpp
-	@echo Compiling $@
+obj/controller.o: src/controller.cpp include/controller.h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
-obj/ltf_nd_filter.o: tdf/ltf_nd_filter.cpp
-	@echo Compiling $@
+obj/tank.o: src/tank.cpp include/tank.h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
-	
-obj/mixer_de.o: tdf/mixer_de.cpp
-	@echo Compiling $@
+
+obj/valve.o: src/valve.cpp include/valve.h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
-	
-obj/mixer.o: tdf/mixer.cpp
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
-	
-obj/rectifier.o: tdf/rectifier.cpp
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
-		
-obj/sampler.o: tdf/sampler.cpp
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
-	
-obj/sin_src.o: tdf/sin_src.cpp
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
-	
-#------------------------------------------------------------
-#--------------------ELN Modules-----------------------------
-obj/eln_source.o: eln/eln_source.cpp
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
-	
-#------------------------------------------------------------
-#--------------------LSF Modules-----------------------------
-obj/lsf_in_tdf.o: lsf/lsf_in_tdf.cpp
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
-	
+
 clean:
 	@echo "Cleaning..."
 	@rm -rf obj/*.o
-	@rm -rf *.x
+	@rm -rf bin/*.x
 	@rm -rf *.vcd
 	@rm -rf $(EXECUTABLE)
 	@echo "Done!"
 
-.PHONY: all clean install
+.PHONY: all clean

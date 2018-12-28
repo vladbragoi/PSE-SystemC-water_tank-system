@@ -25,7 +25,7 @@ LIBS = $(SYSC_LIBDIR)/libsystemc.a -lpthread
 INCDIR = -I./include/ -I. -I$(SYSTEMC)/include/
 
 CXX=g++
-CFLAGS= -c -g
+CFLAGS= -c
 LD=g++
 
 all: $(EXECUTABLE)
