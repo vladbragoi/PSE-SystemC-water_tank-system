@@ -14,8 +14,14 @@
 
 // valve::~valve() {}
 
+void valve::set_attributes()
+{
+    set_timestep(5, SC_MS);
+}
+
 void valve::processing()
 {
+    double delta = 0.25 * get_timestep().to_seconds();
     switch (command.read())
     {
     case IDLE:
@@ -27,11 +33,18 @@ void valve::processing()
         }
         else
         {
-            valve_aperture = 0.25;
+            valve_aperture += delta;
         }
         break;
     case CLOSE:
-        valve_aperture = -0.25;
+        if (valve_aperture > 0)
+        {
+            valve_aperture -= delta;
+        }
+        else
+        {
+            valve_aperture = 0;
+        }
         break;
     }
 

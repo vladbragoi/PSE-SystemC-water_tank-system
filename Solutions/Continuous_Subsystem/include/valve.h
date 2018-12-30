@@ -19,10 +19,10 @@ SCA_TDF_MODULE(valve)
 
     SCA_CTOR(valve)
     {
-        aperture.write(0.7);
         valve_aperture = 0;
     }
 
+    void set_attributes();
     void processing() override;
 
   private:
