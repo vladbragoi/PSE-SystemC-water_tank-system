@@ -17,16 +17,16 @@ int sc_main(int argc, char **argv)
     tank tank("tank");
     controller controller("controller");
 
-    controller.water_level(water_level);
-    controller.command(command);
-    controller.aperture_threshold(threshold);
+    valve.command(command);
+    valve.aperture_threshold(threshold);
+    valve.aperture(valve_aperture);
 
     tank.valve_aperture(valve_aperture);
     tank.water_level(water_level);
 
-    valve.command(command);
-    valve.aperture_threshold(threshold);
-    valve.aperture(valve_aperture);
+    controller.water_level(water_level);
+    controller.command(command);
+    controller.aperture_threshold(threshold);
 
     sca_trace_file *file = sca_create_vcd_trace_file("water");
     sca_trace(file, water_level, "water_level");
@@ -34,6 +34,6 @@ int sc_main(int argc, char **argv)
     sca_trace(file, valve_aperture, "valve_aperture");
     sca_trace(file, command, "command");
 
-    sc_start(1000, SC_SEC);
+    sc_start(3000, SC_SEC);
     sca_close_vcd_trace_file(file);
 }
