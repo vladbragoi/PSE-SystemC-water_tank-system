@@ -55,7 +55,6 @@ int sc_main(int argc, char *argv[])
     xtea_tb.dout_rdy(dout_rdy);
 
     // TRACE FILE
-
     sc_trace_file *fp = sc_create_vcd_trace_file("wave");
     sc_trace(fp, clk, "clk");
     sc_trace(fp, rst, "rst");
