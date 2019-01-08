@@ -34,6 +34,6 @@ int sc_main(int argc, char **argv)
     sca_trace(file, valve_aperture, "valve_aperture");
     sca_trace(file, command, "command");
 
-    sc_start(3000, SC_SEC);
+    sc_start(800, SC_SEC);
     sca_close_vcd_trace_file(file);
 }

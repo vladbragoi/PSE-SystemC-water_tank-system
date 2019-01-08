@@ -2,11 +2,11 @@
 // Created by vlad on 14/11/18.
 //
 
-#include "xtea_RTL.h"
+#include "xtea.h"
 
 #define N_CYCLES 64
 
-void xtea_RTL::fsm()
+void xtea::fsm()
 {
     NEXT_STATUS = STATUS;
 
@@ -70,7 +70,7 @@ void xtea_RTL::fsm()
     }
 }
 
-void xtea_RTL::datapath()
+void xtea::datapath()
 {
     if (rst.read() != 0)
     {

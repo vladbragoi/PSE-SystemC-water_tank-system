@@ -7,11 +7,11 @@
 #include <systemc.h>
 
 // SystemC struct
-SC_MODULE(xtea_RTL)
+SC_MODULE(xtea)
 {
-
     // INPUTS
     sc_in<sc_logic> clk;
+    sc_in<bool> rst;
     sc_in<sc_uint<32>> word0;
     sc_in<sc_uint<32>> word1;
     sc_in<sc_uint<32>> key0;
@@ -20,7 +20,6 @@ SC_MODULE(xtea_RTL)
     sc_in<sc_uint<32>> key3;
     sc_in<bool> din_rdy;
     sc_in<bool> mode;
-    sc_in<bool> rst;
 
     // OUTPUTS
     sc_out<sc_uint<32>> result0;
@@ -75,7 +74,7 @@ SC_MODULE(xtea_RTL)
     void datapath();
 
     // SystemC module constructor
-    SC_CTOR(xtea_RTL)
+    SC_CTOR(xtea)
     {
         SC_METHOD(fsm);
         sensitive << STATUS;

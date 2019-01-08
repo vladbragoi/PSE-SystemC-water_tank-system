@@ -6,7 +6,6 @@
 
 void valve::set_attributes()
 {
-    // set_timestep(sca_time(1000, SC_MS));
     // command.set_delay(1);
     // command.set_timestep(5, SC_MS);
     // aperture_threshold.set_delay(1);
@@ -49,6 +48,4 @@ void valve::processing()
     {
         aperture.write(valve_aperture);
     }
-
-    // cout << "skip: " << skip << " aperture: " << valve_aperture << " threshold: " << aperture_threshold << endl;
 }

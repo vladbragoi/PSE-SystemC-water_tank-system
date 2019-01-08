@@ -18,7 +18,6 @@ tlm::tlm_sync_enum xtea_LT_testbench::nb_transport_bw(
 
 void xtea_LT_testbench::run()
 {
-
     sc_time local_time = q_keeper.get_local_time();
 
     iostruct xtea_packet;
@@ -64,7 +63,7 @@ void xtea_LT_testbench::run()
     q_keeper.set(local_time);
     if (q_keeper.need_sync())
     {
-        cout << "SYNCHRONIZING" << endl;
+        // cout << "SYNCHRONIZING" << endl;
         q_keeper.sync();
     }
 
@@ -106,7 +105,7 @@ void xtea_LT_testbench::run()
     q_keeper.set(local_time);
     if (q_keeper.need_sync())
     {
-        cout << "SYNCHRONIZING" << endl;
+        // cout << "SYNCHRONIZING" << endl;
         q_keeper.sync();
     }
 

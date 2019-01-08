@@ -12,7 +12,6 @@
 class xtea_LT_testbench : public sc_module,
                           public virtual tlm::tlm_bw_transport_if<>
 {
-
   private:
     SC_HAS_PROCESS(xtea_LT_testbench);
     virtual void invalidate_direct_mem_ptr(uint64 start_range, uint64 end_range);
