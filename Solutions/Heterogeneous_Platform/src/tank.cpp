@@ -4,18 +4,19 @@
 
 #include "tank.h"
 
-tank::tank(sc_core::sc_module_name) : valve_aperture("valve_aperture"),
-                                      water_level("water_level"),
-                                      input_converter("input"),
-                                      output_converter("output"),
-                                      sub("sub"),
-                                      water_integrator("water_integrator"),
-                                      valve_gain("valve_gain", 0.6),
-                                      water_gain("water_gain", 0.003),
-                                      x_derivative("x_derivative"),
-                                      a("a"),
-                                      sig1("sig1"),
-                                      sig2("sig2")
+tank::tank(sc_core::sc_module_name name) : sc_module(name),
+                                           valve_aperture("valve_aperture"),
+                                           water_level("water_level"),
+                                           input_converter("input"),
+                                           output_converter("output"),
+                                           sub("sub"),
+                                           water_integrator("water_integrator"),
+                                           valve_gain("valve_gain", 0.6),
+                                           water_gain("water_gain", 0.003),
+                                           x_derivative("x_derivative"),
+                                           a("a"),
+                                           sig1("sig1"),
+                                           sig2("sig2")
 {
     input_converter.inp(valve_aperture);
     input_converter.y(a);

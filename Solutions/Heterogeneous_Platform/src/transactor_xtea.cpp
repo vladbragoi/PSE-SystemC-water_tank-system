@@ -11,36 +11,16 @@ transactor_xtea::transactor_xtea(sc_module_name name) : sc_module(name),
 
     SC_THREAD(writeprocess);
     sensitive << clk.pos();
-
-    SC_THREAD(readprocess);
-    sensitive << clk.pos();
 }
 
 void transactor_xtea::b_transport(tlm::tlm_generic_payload &trans, sc_time &t)
 {
     wait(0, SC_NS);
-    tlm::tlm_command trans_command = trans.get_command();
 
-    switch (trans_command)
-    {
-    case tlm::TLM_WRITE_COMMAND:
-        data = *((xtea_data *)trans.get_data_ptr());
-        trans.set_response_status(tlm::TLM_OK_RESPONSE);
-        begin_write.notify();
-        wait(end_write);
-        break;
-
-    case tlm::TLM_READ_COMMAND:
-        data = *((xtea_data *)trans.get_data_ptr());
-        trans.set_response_status(tlm::TLM_OK_RESPONSE);
-        begin_read.notify();
-        wait(end_read);
-        *((xtea_data *)trans.get_data_ptr()) = data;
-        break;
-
-    default:
-        break;
-    }
+    data = *((xtea_data *)trans.get_data_ptr());
+    trans.set_response_status(tlm::TLM_OK_RESPONSE);
+    begin_write.notify();
+    wait(end_write);
 }
 
 void transactor_xtea::writeprocess()
@@ -59,23 +39,6 @@ void transactor_xtea::writeprocess()
         din_rdy.write(true);
         end_write.notify();
         wait();
-    }
-}
-
-void transactor_xtea::readprocess()
-{
-    while (true)
-    {
-        wait(begin_read);
-        while (dout_rdy.read() != true)
-        {
-            wait();
-        }
-
-        data.word[0] = result[0];
-        data.word[1] = result[1];
-
-        end_read.notify();
     }
 }
 

@@ -36,11 +36,10 @@ class transactor_xtea : public sc_module,
     sc_out<sc_uint<32>> word[2];
     sc_out<sc_uint<32>> key[4];
     sc_out<bool> din_rdy;
-    sc_out<bool> mode;
     sc_out<bool> rst;
+    sc_out<bool> mode;
 
     void writeprocess();
-    void readprocess();
 
     void end_of_elaboration();
     void reset();

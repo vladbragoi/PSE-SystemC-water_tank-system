@@ -1,9 +1,20 @@
-DESIGN_NAME=xtea
-ABSTRACTION_LEVEL=RTL
+DESIGN_NAME=watertank_system
+ABSTRACTION_LEVEL=HP
 
 
 SYSTEMC_AMS=$$SCAMS_HOME
 SYSTEMC=$$SYSTEMC_HOME
+
+SYS=wt_system
+CONTR=controller
+TANK=tank
+TANK_IF=tank_iface
+VALVE=valve
+VALVE_IF=valve_iface
+XTEA=xtea
+XTEA_TRANS=transactor_xtea
+WT_TRANS=transactor_watertank
+
 
 PLATFORM= $(shell uname -s)
 ARCH=$(shell getconf LONG_BIT)
@@ -26,8 +37,6 @@ LIBS = $(SCAMS_LIBDIR)/libsystemc-ams.a \
 	   $(SYSC_LIBDIR)/libsystemc.a \
 	   -lpthread
 
-LIBS = $(SCAMS_LIBDIR)/libsystemc-ams.a $(SYSC_LIBDIR)/libsystemc.a -lpthread
-
 INCDIR = -I./include/ -I. -I$(SYSTEMC)/include/ -I$(SYSTEMC_AMS)/include
 
 CXX=g++
@@ -38,23 +47,39 @@ EXECUTABLE = bin/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).x
 
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): obj/main_$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o obj/$(DESIGN_NAME)_LT_testbench.o obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o obj/$(DESIGN_NAME)_RTL_TLM_transactor.o
+$(EXECUTABLE): obj/main.o obj/$(SYS).o obj/$(CONTR).o obj/$(TANK_IF).o obj/$(CONTR).o obj/$(WT_TRANS).o obj/$(XTEA_TRANS).o obj/$(VALVE_IF).o obj/$(VALVE).o obj/$(XTEA).o
 	@echo Building $@
 	$(CXX) -g $(INCDIR) -o $@ $^ $(LIBS)
 
-obj/main_$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o: src/main_$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).cpp
+obj/main.o: src/main.cpp
 	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
-obj/$(DESIGN_NAME)_LT_testbench.o: src/$(DESIGN_NAME)_LT_testbench.cpp include/$(DESIGN_NAME)_LT_testbench.h
+obj/$(SYS).o: src/$(SYS).cpp include/$(SYS).h
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
-obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o: src/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).cpp include/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).h
-	@echo Building $@
+obj/$(CONTR).o: src/$(CONTR).cpp include/$(CONTR).h
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
-obj/$(DESIGN_NAME)_RTL_TLM_transactor.o: src/$(DESIGN_NAME)_RTL_TLM_transactor.cpp include/$(DESIGN_NAME)_RTL_TLM_transactor.h
-	@echo Building $@
+obj/$(TANK).o: src/$(TANK).cpp include/$(TANK).h
+	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
+
+obj/$(TANK_IF).o: src/$(TANK_IF).cpp include/$(TANK_IF).h
+	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
+
+obj/$(VALVE).o: src/$(VALVE).cpp include/$(VALVE).h
+	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
+
+obj/$(VALVE_IF).o: src/$(VALVE_IF).cpp include/$(VALVE_IF).h
+	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
+
+obj/$(XTEA).o: src/$(XTEA).cpp include/$(XTEA).h
+	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
+
+obj/$(WT_TRANS).o: src/$(WT_TRANS).cpp include/$(WT_TRANS).h
+	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
+
+obj/$(XTEA_TRANS).o: src/$(XTEA_TRANS).cpp include/$(XTEA_TRANS).h
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
 clean:

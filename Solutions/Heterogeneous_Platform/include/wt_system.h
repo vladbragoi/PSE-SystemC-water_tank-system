@@ -18,7 +18,7 @@
 
 #define PERIOD 10
 
-class system : public sc_module
+class wt_system : public sc_module
 {
 public:
   sc_signal<sc_logic> clk;
@@ -44,17 +44,17 @@ public:
   sc_signal<sc_uint<32>> result[2];
   sc_signal<bool> dout_rdy;
 
-  tank tank;
-  valve valve;
-  controller controller;
-  xtea xtea;
+  tank t;
+  valve v;
+  controller c;
+  xtea x;
 
-  tank_iface tank_iface;
-  valve_iface valve_iface;
-  transactor_xtea xtea_transactor;
-  transactor_watertank watertank_transactor;
+  tank_iface t_iface;
+  valve_iface v_iface;
+  transactor_xtea xtea_trans;
+  transactor_watertank watertank_trans;
 
-  SC_HAS_PROCESS(system);
-  system(sc_module_name name);
-  ~system();
+  SC_HAS_PROCESS(wt_system);
+  wt_system(sc_module_name name);
+  // ~system();
 };

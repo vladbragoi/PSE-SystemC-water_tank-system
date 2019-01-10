@@ -7,13 +7,14 @@
 #include <systemc-ams.h>
 #include "command.h"
 
-SC_MODULE(tank)
+class tank : public sc_module
 {
   public:
     sca_tdf::sca_in<double> valve_aperture; // feedback control
     sca_tdf::sca_out<double> water_level;
 
-    tank(sc_core::sc_module_name);
+    SC_HAS_PROCESS(tank);
+    tank(sc_module_name name);
 
   private:
     sca_lsf::sca_tdf::sca_source input_converter;
