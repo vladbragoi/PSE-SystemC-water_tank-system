@@ -20,14 +20,14 @@ int sc_main(int argc, char *argv[])
     sc_trace(fp, sys->mode, "mode");
 
     // trace internal signals
-    sc_trace(fp, sys->x.STATUS, "STATUS");
-    sc_trace(fp, sys->x.counter, "counter");
-    sc_trace(fp, sys->x.sum, "sum");
-    sc_trace(fp, sys->x.delta, "delta");
-    sc_trace(fp, sys->x.v0, "v0");
-    sc_trace(fp, sys->x.v1, "v1");
-    sc_trace(fp, sys->x.key, "key");
-    sc_trace(fp, sys->x.sum, "sum");
+    sc_trace(fp, sys->m_xtea.STATUS, "STATUS");
+    sc_trace(fp, sys->m_xtea.counter, "counter");
+    sc_trace(fp, sys->m_xtea.sum, "sum");
+    sc_trace(fp, sys->m_xtea.delta, "delta");
+    sc_trace(fp, sys->m_xtea.v0, "v0");
+    sc_trace(fp, sys->m_xtea.v1, "v1");
+    sc_trace(fp, sys->m_xtea.key, "key");
+    sc_trace(fp, sys->m_xtea.sum, "sum");
 
     sc_start();
 

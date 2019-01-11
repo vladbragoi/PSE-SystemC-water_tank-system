@@ -33,9 +33,7 @@ SYSC_LIBDIR := $(SYSC_LIBDIR)64
 SCAMS_LIBDIR := $(SCAMS_LIBDIR)64
 endif
 
-LIBS = $(SCAMS_LIBDIR)/libsystemc-ams.a \
-	   $(SYSC_LIBDIR)/libsystemc.a \
-	   -lpthread
+LIBS = $(SCAMS_LIBDIR)/libsystemc-ams.a $(SYSC_LIBDIR)/libsystemc.a -lpthread
 
 INCDIR = -I./include/ -I. -I$(SYSTEMC)/include/ -I$(SYSTEMC_AMS)/include
 
@@ -47,39 +45,50 @@ EXECUTABLE = bin/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).x
 
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): obj/main.o obj/$(SYS).o obj/$(CONTR).o obj/$(TANK_IF).o obj/$(CONTR).o obj/$(WT_TRANS).o obj/$(XTEA_TRANS).o obj/$(VALVE_IF).o obj/$(VALVE).o obj/$(XTEA).o
+$(EXECUTABLE): obj/main.o obj/$(SYS).o obj/$(CONTR).o obj/$(TANK_IF).o \
+				obj/$(CONTR).o obj/$(WT_TRANS).o obj/$(XTEA_TRANS).o \
+				obj/$(VALVE_IF).o obj/$(VALVE).o obj/$(XTEA).o
 	@echo Building $@
-	$(CXX) -g $(INCDIR) -o $@ $^ $(LIBS)
+	$(CXX) -o $@ $(INCDIR) $^ $(LIBS)
 
 obj/main.o: src/main.cpp
 	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
 obj/$(SYS).o: src/$(SYS).cpp include/$(SYS).h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
 obj/$(CONTR).o: src/$(CONTR).cpp include/$(CONTR).h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
 obj/$(TANK).o: src/$(TANK).cpp include/$(TANK).h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
 obj/$(TANK_IF).o: src/$(TANK_IF).cpp include/$(TANK_IF).h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
 obj/$(VALVE).o: src/$(VALVE).cpp include/$(VALVE).h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
 obj/$(VALVE_IF).o: src/$(VALVE_IF).cpp include/$(VALVE_IF).h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
 obj/$(XTEA).o: src/$(XTEA).cpp include/$(XTEA).h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
 obj/$(WT_TRANS).o: src/$(WT_TRANS).cpp include/$(WT_TRANS).h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
 obj/$(XTEA_TRANS).o: src/$(XTEA_TRANS).cpp include/$(XTEA_TRANS).h
+	@echo Building $@
 	@$(CXX) $(DEBUG) $(CFLAGS) $(INCDIR) -o $@ $<
 
 clean:

@@ -17,6 +17,6 @@ SCA_TDF_MODULE(valve_iface)
 
     SCA_CTOR(valve_iface) {}
 
-    void set_attributes();
+    // void set_attributes();
     void processing() override;
 };
