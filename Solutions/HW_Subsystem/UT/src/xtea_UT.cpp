@@ -6,14 +6,15 @@
 
 xtea_UT::xtea_UT(sc_module_name name) : sc_module(name),
                                         target_socket("target_socket"),
-                                        pending_transaction(NULL) {
+                                        pending_transaction(nullptr) {
     target_socket(*this);
 }
 
 void xtea_UT::b_transport(tlm::tlm_generic_payload &trans, sc_time &t) {
     data = *((iostruct *) trans.get_data_ptr());
     if (trans.is_write()) {
-        xtea(data.word0, data.word1, data.mode, data.key0, data.key1, data.key2, data.key3);
+        xtea(data.word0.to_uint(), data.word1.to_uint(), data.mode,
+             data.key0.to_uint(), data.key1.to_uint(), data.key2.to_uint(), data.key3.to_uint());
 
         trans.set_response_status(tlm::TLM_OK_RESPONSE);
 
@@ -140,9 +141,7 @@ void xtea_UT::xtea(uint32_t word0, uint32_t word1, bool mode,
     res1 = v1;
 }
 
-bool xtea_UT::get_direct_mem_ptr(tlm::tlm_generic_payload &trans, tlm::tlm_dmi &dmi_data) {
-    return false;
-}
+bool xtea_UT::get_direct_mem_ptr(tlm::tlm_generic_payload &trans, tlm::tlm_dmi &dmi_data) { return false; }
 
 tlm::tlm_sync_enum xtea_UT::nb_transport_fw(
         tlm::tlm_generic_payload &trans,
@@ -151,9 +150,7 @@ tlm::tlm_sync_enum xtea_UT::nb_transport_fw(
     return tlm::TLM_COMPLETED;
 }
 
-unsigned int xtea_UT::transport_dbg(tlm::tlm_generic_payload &trans) {
-    return 0;
-}
+unsigned int xtea_UT::transport_dbg(tlm::tlm_generic_payload &trans) { return 0; }
 
 void xtea_UT::end_of_elaboration() {}
 

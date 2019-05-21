@@ -12,9 +12,9 @@ private:
     xtea_LT_testbench m_initiator;
 
 public:
-    xtea_top(sc_module_name name) : sc_module(name),
-                                    m_target("target"),
-                                    m_initiator("initiator") {
+    explicit xtea_top(const sc_module_name &name) : sc_module(name),
+                                                    m_target("target"),
+                                                    m_initiator("initiator") {
         m_initiator.initiator_socket(m_target.target_socket);
     }
 };

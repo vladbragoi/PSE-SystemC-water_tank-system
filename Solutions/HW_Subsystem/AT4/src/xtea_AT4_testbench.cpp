@@ -4,8 +4,7 @@
 
 #include "xtea_AT4_testbench.h"
 
-void xtea_AT4_testbench::invalidate_direct_mem_ptr(uint64 start_range, uint64 end_range) {
-}
+void xtea_AT4_testbench::invalidate_direct_mem_ptr(uint64 start_range, uint64 end_range) {}
 
 tlm::tlm_sync_enum xtea_AT4_testbench::nb_transport_bw(
         tlm::tlm_generic_payload &trans,

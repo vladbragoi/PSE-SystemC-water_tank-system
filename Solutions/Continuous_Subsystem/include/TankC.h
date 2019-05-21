@@ -12,7 +12,7 @@ public:
     sca_tdf::sca_in<double> valve_aperture; // feedback control
     sca_tdf::sca_out<double> water_level;
 
-    TankC(sc_core::sc_module_name);
+    explicit TankC(sc_core::sc_module_name);
 
 private:
     sca_lsf::sca_tdf::sca_source input_converter;

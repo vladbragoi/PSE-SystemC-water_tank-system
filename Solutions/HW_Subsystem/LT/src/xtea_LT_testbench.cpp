@@ -107,6 +107,6 @@ xtea_LT_testbench::xtea_LT_testbench(sc_module_name name) : sc_module(name) {
 
     SC_THREAD(run);
 
-    q_keeper.set_global_quantum(sc_time(500, SC_NS));
+    tlm_utils::tlm_quantumkeeper::set_global_quantum(sc_time(500, SC_NS));
     q_keeper.reset();
 }

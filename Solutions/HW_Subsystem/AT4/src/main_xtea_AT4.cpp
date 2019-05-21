@@ -6,7 +6,6 @@
 #include "xtea_AT4.h"
 
 class xtea_top : public sc_module {
-
 private:
     xtea_AT4 m_target;
     xtea_AT4_testbench m_initiator;

@@ -15,13 +15,9 @@ class xtea_LT_testbench : public sc_module,
 private:
     SC_HAS_PROCESS(xtea_LT_testbench);
 
-    virtual void invalidate_direct_mem_ptr(uint64 start_range, uint64 end_range);
+    void invalidate_direct_mem_ptr(uint64 start_range, uint64 end_range) override;
 
-    virtual tlm::tlm_sync_enum nb_transport_bw(
-            tlm::tlm_generic_payload &trans,
-            tlm::tlm_phase &phase,
-            sc_time &t);
-
+    tlm::tlm_sync_enum nb_transport_bw(tlm::tlm_generic_payload &trans, tlm::tlm_phase &phase, sc_time &t) override;
     void run();
 
     tlm_utils::tlm_quantumkeeper q_keeper;
@@ -29,5 +25,5 @@ private:
 public:
     tlm::tlm_initiator_socket<> initiator_socket;
 
-    xtea_LT_testbench(sc_module_name name);
+    explicit xtea_LT_testbench(sc_module_name name);
 };

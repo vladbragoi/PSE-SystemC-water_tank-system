@@ -19,5 +19,3 @@ struct iostruct {
     sc_uint<32> result1;
 };
 
-#define ADDRESS_TYPE int
-#define DATA_TYPE iostruct

@@ -6,7 +6,7 @@
 
 xtea_AT4::xtea_AT4(sc_module_name name) : sc_module(name),
                                           target_socket("target_socket"),
-                                          pending_transaction(NULL) {
+                                          pending_transaction(nullptr) {
     target_socket(*this);
     SC_THREAD(ioprocess);
 }
@@ -16,8 +16,8 @@ void xtea_AT4::b_transport(tlm::tlm_generic_payload &trans, sc_time &t) {}
 void xtea_AT4::xtea() {
     uint32_t i, delta, v0, v1, temp;
     uint64_t sum;
-    v0 = data.word0;
-    v1 = data.word1;
+    v0 = data.word0.to_uint();
+    v1 = data.word1.to_uint();
     data.result0 = 0;
     data.result1 = 0;
     sum = 0;
@@ -28,16 +28,16 @@ void xtea_AT4::xtea() {
         for (i = 0; i < 32; i++) {
             switch (sum & 3) {
                 case 0:
-                    temp = data.key0;
+                    temp = data.key0.to_uint();
                     break;
                 case 1:
-                    temp = data.key1;
+                    temp = data.key1.to_uint();
                     break;
                 case 2:
-                    temp = data.key2;
+                    temp = data.key2.to_uint();
                     break;
                 case 3:
-                    temp = data.key3;
+                    temp = data.key3.to_uint();
                     break;
                 default:
                     printf("Something wrong!\n");
@@ -51,16 +51,16 @@ void xtea_AT4::xtea() {
 
             switch ((sum >> 11) & 3) {
                 case 0:
-                    temp = data.key0;
+                    temp = data.key0.to_uint();
                     break;
                 case 1:
-                    temp = data.key1;
+                    temp = data.key1.to_uint();
                     break;
                 case 2:
-                    temp = data.key2;
+                    temp = data.key2.to_uint();
                     break;
                 case 3:
-                    temp = data.key3;
+                    temp = data.key3.to_uint();
                     break;
                 default:
                     printf("Something wrong!\n");
@@ -77,16 +77,16 @@ void xtea_AT4::xtea() {
         for (i = 0; i < 32; i++) {
             switch ((sum >> 11) & 3) {
                 case 0:
-                    temp = data.key0;
+                    temp = data.key0.to_uint();
                     break;
                 case 1:
-                    temp = data.key1;
+                    temp = data.key1.to_uint();
                     break;
                 case 2:
-                    temp = data.key2;
+                    temp = data.key2.to_uint();
                     break;
                 case 3:
-                    temp = data.key3;
+                    temp = data.key3.to_uint();
                     break;
                 default:
                     printf("Something wrong!\n");
@@ -100,16 +100,16 @@ void xtea_AT4::xtea() {
 
             switch (sum & 3) {
                 case 0:
-                    temp = data.key0;
+                    temp = data.key0.to_uint();
                     break;
                 case 1:
-                    temp = data.key1;
+                    temp = data.key1.to_uint();
                     break;
                 case 2:
-                    temp = data.key2;
+                    temp = data.key2.to_uint();
                     break;
                 case 3:
-                    temp = data.key3;
+                    temp = data.key3.to_uint();
                     break;
                 default:
                     printf("Something wrong!\n");
@@ -134,7 +134,7 @@ tlm::tlm_sync_enum xtea_AT4::nb_transport_fw(
         tlm::tlm_phase &phase,
         sc_time &t) {
 
-    if (pending_transaction != NULL) { // Another transaction is pending
+    if (pending_transaction != nullptr) { // Another transaction is pending
         trans.set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
         return tlm::TLM_COMPLETED;
     }
@@ -153,10 +153,9 @@ tlm::tlm_sync_enum xtea_AT4::nb_transport_fw(
     return tlm::TLM_UPDATED;
 }
 
-unsigned int xtea_AT4::transport_dbg(tlm::tlm_generic_payload &trans) {
-    return 0;
-}
+#pragma clang diagnostic push
 
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
 void xtea_AT4::ioprocess() {
     sc_time timing_annotation;
 
@@ -175,9 +174,13 @@ void xtea_AT4::ioprocess() {
 
         target_socket->nb_transport_bw(*pending_transaction, phase, timing_annotation);
 
-        pending_transaction = NULL;
+        pending_transaction = nullptr;
     }
 }
+
+#pragma clang diagnostic pop
+
+unsigned int xtea_AT4::transport_dbg(tlm::tlm_generic_payload &trans) { return 0; }
 
 void xtea_AT4::end_of_elaboration() {}
 

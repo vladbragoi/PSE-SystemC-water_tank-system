@@ -7,14 +7,14 @@
 void xtea_RTL_testbench::run() {
     sc_uint<32> res0, res1;
 
-    mode.write(0);
+    mode.write(false);
     word0.write(0x12345678);
     word1.write(0x9abcdeff);
     key0.write(0x6a1d78c8);
     key1.write(0x8c86d67f);
     key2.write(0x2a65bfbe);
     key3.write(0xb4bd6e46);
-    rst.write(0);
+    rst.write(false);
 
     wait();
 
@@ -37,7 +37,7 @@ void xtea_RTL_testbench::run() {
     if ((res0 != 0x99bbb92b) || (res1 != 0x3ebd1644))
         printf("Wrong result!\n");
 
-    mode.write(1);
+    mode.write(true);
     word0.write(res0);
     word1.write(res1);
     key0.write(0x6a1d78c8);
@@ -68,6 +68,8 @@ void xtea_RTL_testbench::run() {
     sc_stop();
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
 void xtea_RTL_testbench::clk_gen() {
     while (true) {
         clk.write(sc_dt::SC_LOGIC_1);
@@ -76,3 +78,5 @@ void xtea_RTL_testbench::clk_gen() {
         wait(PERIOD / 2, sc_core::SC_NS);
     }
 }
+
+#pragma clang diagnostic pop

@@ -94,18 +94,18 @@ void xtea_RTL::datapath() {
                 break;
             case ST_M0:
                 // cout << "DEBUG: DP ST_M0" << endl;
-                if ((counter.read() % 2) == 0) { // even cycle
+                if ((counter.read() % 2) == 0) {            // even cycle
                     k.write(sum.read() & 3);
                 } else {
-                    k.write((sum.read() >> 11) & 3); // odd cycle
+                    k.write((sum.read() >> 11) & 3);        // odd cycle
                 };
                 break;
             case ST_M1:
                 // cout << "DEBUG: DP ST_M1" << endl;
-                if ((counter.read() % 2) == 0) { // even cycle
+                if ((counter.read() % 2) == 0) {            // even cycle
                     k.write((sum.read() >> 11) & 3);
                 } else {
-                    k.write(sum.read() & 3); // odd cycle
+                    k.write(sum.read() & 3);                // odd cycle
                 };
                 break;
             case ST_K:
@@ -129,13 +129,13 @@ void xtea_RTL::datapath() {
                 break;
             case ST_CALC:
                 // cout << "DEBUG: DP ST_CALC" << endl;
-                if (mode.read() == 0) { // encipher mode
+                if (mode.read() == 0) {             // encryption mode
                     if ((counter.read() % 2) == 0) {
                         v0 += (((v1 << 4) ^ (v1 >> 5)) + v1) ^ (sum.read() + key.read());
                     } else {
                         v1 += (((v0 << 4) ^ (v0 >> 5)) + v0) ^ (sum.read() + key.read());
                     }
-                } else { // decipher mode
+                } else {                              // decryption mode
                     if (counter.read() % 2 == 0) {
                         v1 -= (((v0 << 4) ^ (v0 >> 5)) + v0) ^ (sum.read() + key.read());
                     } else {
