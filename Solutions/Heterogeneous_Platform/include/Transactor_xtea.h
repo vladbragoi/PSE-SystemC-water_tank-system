@@ -51,6 +51,5 @@ public:
     // INTERNAL VARIABLES
     xtea_data data;
     tlm::tlm_target_socket<> target_socket;
-    sc_event begin_write,
-            end_write;
+    sc_event begin_write, end_write;
 };

@@ -7,6 +7,10 @@
 #include <systemc-ams.h>
 #include "command.h"
 
+/**
+ * This module performs water level check, a function of the valve aperture s.t.:
+ *              d(x)/dt = 0.6 ∗ a − 0.03 ∗ x
+ */
 SC_MODULE(Tank) {
 public:
     explicit Tank(sc_core::sc_module_name name);

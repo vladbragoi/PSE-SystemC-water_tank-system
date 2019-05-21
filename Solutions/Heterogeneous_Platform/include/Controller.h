@@ -16,6 +16,14 @@
 #define WATER_HIGH_LEVEL 8.8
 #define WATER_LOW_LEVEL 5
 
+/**
+ * This module performs water level monitoring:
+ * - If the water level is between 5 and 8: encrypt and send the valve the command IDLE;
+ * - If the water level is greater than 8.8: modify every 5 seconds the valve aperture threshold s.t.
+ *      t = t ∗ 0.7 and send the valve the command CLOSE;
+ * - If the water level is lower then 5: modify every 5 seconds the valve aperture threshold s.t.
+ *      t = t ∗ 1.1 and send the valve the command OPEN.
+ */
 class Controller :
         public sc_module,
         public virtual tlm::tlm_bw_transport_if<> {

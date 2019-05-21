@@ -7,6 +7,12 @@
 #include <systemc-ams.h>
 #include "command.h"
 
+/**
+ * This module performs the valve aperture, that is a function of time and command s.t.:
+ * - If the command is IDLE: d(a)/dt = 0;
+ * - If the command is OPEN: d(a)/dt = 0.25;
+ * - If the command is CLOSE: d(a)/dt = −0.25
+ */
 SCA_TDF_MODULE(Valve) {
 public:
     explicit SCA_CTOR(Valve) {
