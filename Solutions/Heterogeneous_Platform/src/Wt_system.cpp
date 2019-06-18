@@ -12,7 +12,7 @@ Wt_system::Wt_system(sc_module_name name) : sc_module(name),
     SC_THREAD(clk_gen);
 
     // TRANSACTOR: RTL -> TLM
-    m_tank_transactor.water_level(water_level_rtl);
+    m_tank_transactor.water_level(water_level);
 
     m_controller.tank_socket(m_tank_transactor.target_socket);
     m_controller.xtea_socket(m_xtea_transactor.target_socket);
@@ -61,7 +61,7 @@ Wt_system::Wt_system(sc_module_name name) : sc_module(name),
 
     // TANK iface: AMS -> RTL
     m_tank_iface.ams_water_level(water_level_ams);
-    m_tank_iface.rtl_water_level(water_level_rtl);
+    m_tank_iface.rtl_water_level(water_level);
 
 }
 

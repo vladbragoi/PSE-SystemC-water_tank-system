@@ -58,7 +58,7 @@ void xtea_AT4_testbench::run() {
     }
 
     if (phase != tlm::END_REQ) {
-        printf("Unexcepted protocop phase: forcing simulation stop.\n");
+        printf("Unexpected protocol phase: forcing simulation stop.\n");
         sc_stop();
     }
 

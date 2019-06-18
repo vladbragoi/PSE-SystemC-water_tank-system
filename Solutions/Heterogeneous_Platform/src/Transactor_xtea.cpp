@@ -49,10 +49,7 @@ void Transactor_xtea::writeprocess() {
         mode.write(DECRYPT);
         din_rdy.write(true);
 
-//        while(!dout_rdy.read()) {
-//            wait();
-//        }
-        wait(5, SC_MS);
+        wait(5, SC_MS); // 5 MS
 
         // Threshold decryption
         rst.write(true);

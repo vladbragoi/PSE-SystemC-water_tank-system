@@ -29,7 +29,7 @@ void Controller::run() {
     double *ptr = nullptr;
 
     while (true) {
-        wait(4, SC_SEC);
+        wait(4, SC_SEC); // 5 S
 
         // Receiving water level
         payload.set_data_ptr((unsigned char *) &tank_packet);

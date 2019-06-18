@@ -74,17 +74,14 @@ void xtea_RTL::datapath() {
                 result0.write(0);
                 result1.write(0);
                 dout_rdy.write(false);
-                break;
-            case ST_READ:
-                // cout << "DEGUB: DP ST_READ" << endl;
-                result0.write(0);
-                result1.write(0);
-                v0 = word0.read();
-                v1 = word1.read();
-                dout_rdy.write(false);
                 counter.write(0);
                 delta.write(0x9e3779b9);
                 k.write(0);
+                break;
+            case ST_READ:
+                // cout << "DEGUB: DP ST_READ" << endl;
+                v0 = word0.read();
+                v1 = word1.read();
 
                 if (mode.read() == 0)
                     sum.write(0);
@@ -129,17 +126,21 @@ void xtea_RTL::datapath() {
                 break;
             case ST_CALC:
                 // cout << "DEBUG: DP ST_CALC" << endl;
-                if (mode.read() == 0) {             // encryption mode
+                if (mode.read() == 0) {     // ENCRYPTION MODE
                     if ((counter.read() % 2) == 0) {
-                        v0 += (((v1 << 4) ^ (v1 >> 5)) + v1) ^ (sum.read() + key.read());
+                        v0.write(v0.read() +
+                                 ((((v1.read() << 4) ^ (v1.read() >> 5)) + v1.read()) ^ (sum.read() + key.read())));
                     } else {
-                        v1 += (((v0 << 4) ^ (v0 >> 5)) + v0) ^ (sum.read() + key.read());
+                        v1.write(v1.read() +
+                                 ((((v0.read() << 4) ^ (v0.read() >> 5)) + v0.read()) ^ (sum.read() + key.read())));
                     }
-                } else {                              // decryption mode
+                } else {                      // DECRYPTION MODE
                     if (counter.read() % 2 == 0) {
-                        v1 -= (((v0 << 4) ^ (v0 >> 5)) + v0) ^ (sum.read() + key.read());
+                        v1.write(v1.read() -
+                                 ((((v0.read() << 4) ^ (v0.read() >> 5)) + v0.read()) ^ (sum.read() + key.read())));
                     } else {
-                        v0 -= (((v1 << 4) ^ (v1 >> 5)) + v1) ^ (sum.read() + key.read());
+                        v0.write(v0.read() -
+                                 ((((v1.read() << 4) ^ (v1.read() >> 5)) + v1.read()) ^ (sum.read() + key.read())));
                     }
                 };
                 break;

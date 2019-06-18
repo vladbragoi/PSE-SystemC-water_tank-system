@@ -16,15 +16,10 @@ void xtea_UT::b_transport(tlm::tlm_generic_payload &trans, sc_time &t) {
         xtea(data.word0.to_uint(), data.word1.to_uint(), data.mode,
              data.key0.to_uint(), data.key1.to_uint(), data.key2.to_uint(), data.key3.to_uint());
 
+        data.result0 = res0;
+        data.result1 = res1;
+        *((iostruct *) trans.get_data_ptr()) = data;
         trans.set_response_status(tlm::TLM_OK_RESPONSE);
-
-        data.result0 = res0;
-        data.result1 = res1;
-        *((iostruct *) trans.get_data_ptr()) = data;
-    } else if (trans.is_read()) {
-        data.result0 = res0;
-        data.result1 = res1;
-        *((iostruct *) trans.get_data_ptr()) = data;
     }
 }
 

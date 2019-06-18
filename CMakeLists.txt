@@ -29,6 +29,10 @@ find_library(systemc-ams systemc-ams ${SCAMS_HOME}/lib-linux64)
 link_directories(${SYSTEMC_HOME}/lib-linux64)
 link_directories(${SCAMS_HOME}/lib-linux64)
 
+add_custom_target(clean-all
+        COMMAND ${CMAKE_BUILD_TOOL} clean
+        COMMAND rm -rf *.vcd)
+
 add_executable(heterogeneous_platform.x
         Solutions/Heterogeneous_Platform/src/main.cpp
         Solutions/Heterogeneous_Platform/src/Controller.cpp

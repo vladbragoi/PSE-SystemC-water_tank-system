@@ -53,13 +53,13 @@ SC_MODULE(Xtea) {
     /**
      * Internal variables
      */
-    sc_signal<sc_uint<32>> k;       // choose which 32-bit key to select
-    sc_signal<sc_uint<32>> key;     // store the key selected
-    sc_signal<sc_uint<32>> delta;   // store the delta value
-    sc_signal<sc_uint<7>> counter; // counter variable
-    sc_signal<sc_uint<64>> sum;     // sum variable
-    sc_signal<sc_uint<32>> v0;      // v0 temp variable
-    sc_signal<sc_uint<32>> v1;      // v1 temp variable
+    sc_signal<sc_uint<2>> k;       /// choose which 32-bit key to select
+    sc_signal<sc_uint<32>> key;     /// store the key selected
+    sc_signal<sc_uint<32>> delta;   /// store the delta value
+    sc_signal<sc_uint<64>> sum;     /// sum variable
+    sc_signal<sc_uint<7>> counter; /// counter variable
+    sc_signal<sc_uint<32>> v0;      /// v0 temp variable
+    sc_signal<sc_uint<32>> v1;      /// v1 temp variable
 
     /**
      * FSM

@@ -18,4 +18,3 @@ struct iostruct {
     sc_uint<32> result0;
     sc_uint<32> result1;
 };
-

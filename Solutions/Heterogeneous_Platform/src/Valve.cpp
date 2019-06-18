@@ -5,7 +5,7 @@
 #include "Valve.h"
 
 void Valve::set_attributes() {
-    set_timestep(5, SC_MS);
+    set_timestep(5, SC_MS); // 4 MS
 }
 
 void Valve::processing() {

@@ -42,7 +42,7 @@ public:
     sc_signal<bool> rst;
     sc_signal<sc_uint<32>> result[2];
     sc_signal<bool> dout_rdy;
-    sc_signal<double> water_level_rtl;
+    sc_signal<double> water_level;
 
     // MODULES
     Tank m_tank;
