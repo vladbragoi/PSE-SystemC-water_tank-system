@@ -7,6 +7,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
 \usepackage{booktabs}
+\usepackage{float}
 \usepackage{caption}
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
@@ -31,43 +32,38 @@ un serbatoio, con sviluppo di moduli SystemC a vari livelli di descrizione hardw
 \end{figure}
 
 Il sistema descritto in questo documento deve monitorare e controllare il livello dell'acqua in un serbatoio. La figura 
-\ref{fig:system} 
-ne mostra la struttura, organizzata nei seguenti moduli:
+\ref{fig:system} ne mostra la struttura, organizzata nei seguenti moduli:
 \begin{itemize}
-    \item Controller, si occupa di leggere il livello dell'acqua ricevuto dal serbatoio, e di inviare sulla base di 
-    questo un comando ai moduli successivi, in modo da controllare l'apertura della valvola sulla base di un limite 
-    massimo (anche questo calcolato e inviato dallo stesso controllore) per fare riempire il serbatoio. Da notare che 
-    questo modulo cifra tutte le informazioni prima di inviarle agli altri moduli.
+    \item Controller, si occupa di leggere il livello dell'acqua ricevuto dal serbatoio (Water Tank), e di inviare sulla 
+    base di questo livello un comando al modulo Valve, attraverso l'XTEA Decipher, in modo da attuare il controllo 
+    sull'apertura della valvola, regolando di conseguenza il livello dell'acqua nel serbatoio. Da notare che questo 
+    modulo cifra tutte le informazioni prima di inviarle agli altri moduli.
     
     \item XTEA Decipher, si occupa di decifrare i messaggi ricevuti dal Controller secondo l'agoritmo eXtended TEA 
     (interessante in questo caso poich\'e utilizza poche risorse hw, adattandosi perfettamente a questo tipo di sistema 
-    embedded), per poi inviarli direttamente al modulo che aziona la valvola.
+    embedded), per poi inviarli direttamente al modulo che svolge la funzione di attuatore, regolando i gradi di apertura
+    della valvola.
     
-    \item Valve, applica i comandi che gli sono stati inviati dal Controller, modificando l'apertura/chiusura della 
-    valvola per far riempire il serbatoio.
+    \item Valve, applica i comandi che gli vengono inviati dal Controller attraverso l'Xtea Decipher, e modifica 
+    l'apertura/chiusura della valvola per far riempire il serbatoio.
     
     \item Water Tank, \`e il sistema dinamico che si occupa del controllo dell'acqua sulla base della seguente funzione:
      \[\dot{x} = 0.6 * a - 0.03 * x\]
      dove $a$ \`e l'apertura della valvola e $x$ \`e il livello dell'acqua.
 \end{itemize}
 
-Nell'introduzione viene descritto in maniera astratta quello che poi viene dettagliato nel seguito del report. Una buona 
-scaletta per l'introduzione pu\`o essere la seguente:
-\begin{itemize}
-\item Descrizione ad alto livello delle principali caratteristiche del sistema che si vuole modellare.
-\item Descrizione delle motivazioni principali per l'utilizzo delle tecnologie descritte nel corso. Qual'\`e il problema 
-che si vuole risolvere?
-\item Descrizione dei passi utilizzati per arrivare all'implementazione finale. Descrivere la motivazione di ciascun 
-passo. La descrizione dei passi dovrebbe 
-formare la descrizione del flusso di lavoro svolto per completare l'assignment.
-\item Rapidissima descrizione dei risultati principali.
-\end{itemize}
+Il sistema da progettare segue diverse implementazioni prima del suo completamento nella versione finale chiamata 
+"Heterogeneous Platform". In particolare, occorre sviluppare i vari sottomoduli seguendo diversi stili di progettazione,
+con un'implementazione dei singoli a diversi livelli di astrazione.
 
-L'introduzione non dovrebbe andare oltre la met\`a della seconda colonna (nel caso a due colonne), o la prima pagina 
-(nel caso a colonna singola): bisogna cercare di essere concisi (e chiari). Alla fine, l'introduzione \`e solo 
-``chiacchiere'': deve semplicemente rendere chiari quali sono gli obiettivi del lavoro (\emph{e nel caso del corso, deve 
-far capire a me che avete gli obiettivi chiari in testa}). Consiglio: l'introduzione (e spesso l'abstract) \`e l'ultima 
-parte che viene completata.
+Nella subdirectory HW\_Subsystem vengono raccolte le diverse implementazioni del modulo XTEA, che hanno permesso di estrarre
+le principali caratteristiche della progettazione digitale e che vengono presentate nella sezione~\ref{sec:xtea}, mentre 
+nella subdirectory Continous\_Subsystem viene presentata un'implementazione delle componenti analogiche (a tempo continuo 
+e a tempo discreto) del sistema, e che verranno descritte nella sezione~\ref{sec:continuous}.
+
+Come sar\`a possibile verificare in seguito, l'implementazione modulare dei vari componenti ne permette sia una 
+progettazione in SystemC (linguaggio di descrizione hw/sw di riferimento per questo progetto), sia la possibilit\`a di 
+simulare tutti i componenti eterogenei nel loro insieme.
 
 \section{Background}
 Il sistema \`e stato implementato interamente in C++, utilizzando la libreria SystemC, poich\'e una delle motivazioni 
@@ -99,7 +95,7 @@ Le specifiche del progetto richiedevano di strutturare il sistema in moduli che 
 diversi livelli di astrazione messi a disposizione dalla libreria SystemC. Di seguito verranno illustrate nel dettaglio 
 le caratteristiche di ciascun modulo:
 
-\subsection{Xtea [RTL/TLM]}
+\subsection{Xtea [RTL/TLM]}\label{sec:xtea}
 Il modulo XTEA implementa l'agoritmo eXtended TEA, ideato da David Wheeler e Roger Needham al Cambridge Computer 
 Laboratory. Il vantaggio principale di questo algoritmo \`e quello di avere una struttura semplice per poter essere 
 impiegato in sistemi di limitate risorse hardware, e quindi il suo impiego si adatta perfettamente ad un sistema embedded
@@ -199,7 +195,7 @@ con l'aumento del livello di astrazione.
     \label{tab:time}
 \end{table}
 
-\subsection{Wwatertank System [AMS]}
+\subsection{Wwatertank System [AMS]}\label{sec:continuous}
 
 Water Tank System è un sistema per il controllo e il monitoraggio del livello dell'acqua di un serbatoio. La modellazione,
 che segue la struttura presentata in figura \ref{fig:continuous_system}, ha richiesto l'utilizzo di SystemC AMS, poich\'e 
@@ -266,7 +262,7 @@ Inoltre, per evitare problemi dovuti al loop creato, \`e stato inserito un delay
 
 Per quanto riguarda la stabilizzazione dell'acqua, questa, come mostrato in figura \ref{fig:water_continuous_system}, 
 si stabilizza approsimativamente attorno ai 200 secondi.
-\begin{figure}[bt]
+\begin{figure}[t]
 	\centering
 	\includegraphics[width=0.95\columnwidth]{figures/water_level_continuous_subsystem.png}
 	\caption{Stabilizzazione dell'acqua relativamente al Water Tank System (AMS) - Continous Subsystem}
@@ -275,67 +271,91 @@ si stabilizza approsimativamente attorno ai 200 secondi.
 
 \subsection{Heterogeneous Platform}
 
-L'Heterogeneous platform, ovvero l'unione in un unico sistema di tutti i moduli (descritti ognuno secondo un proprio
-livello di astrazione) visti fin'ora e gi\`a presentato in parte nella sezione \ref{sec:intro}, \`e caratterizzato, 
-oltre che da questi moduli appunto, anche da ulteriori 4 componenti, necessari per poter simulare l'intero sistema: i transattori. 
-Nella figura \ref{fig:heterogeneous} \`e possibile vedere come questi componenti trasformano un segnale di interconnessione:
+\begin{figure*}[b]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/heterogeneous.pdf}
+    \caption{Struttura del heterogeneous platform}
+    \label{fig:heterogeneous}
+\end{figure*}
+
+L'Heterogeneous platform, ovvero l'unione in un unico sistema di tutti i moduli visti fin'ora (descritti ognuno secondo 
+un proprio livello di astrazione) e gi\`a presentato in parte nella sezione \ref{sec:intro}, \`e costituito da ulteriori 
+4 componenti, necessari per poterne simulare tutto l'insieme: i transattori. 
+In figura \ref{fig:heterogeneous} \`e possibile vedere come questi nuovi componenti trasformano un segnale di 
+interconnessione tra i singoli moduli:
 \begin{itemize}
-    \item da TLM a RTL, per i segnali che partono dal Controller (in TLM) e che vengono inviati al modulo Xtea Decipher 
-    (in RTL);
-    \item da RTL a AMS, per i segnali che partono dal modulo Xtea Decipher e che entrano nel modulo Valve (in AMS);
+    \item da TLM a RTL, per i segnali che partono dal Controller (in TLM) e che vengono 
+    inviati al modulo Xtea Decipher (in RTL);
+    \item da RTL a AMS, per i segnali che partono dal modulo Xtea Decipher e che entrano nel 
+    modulo Valve (in AMS);
     \item da AMS a RTL e nuovamente a TLM, per i segnali in uscita dal modulo Tank (in AMS) ed entranti nel modulo 
-    Controller (TLM);
+    Controller (descritto in TLM);
 \end{itemize}
-Da notare che i componenti Valve Interface e Tank Interface mostrati in figura, sono interfacce RTL necessarie per poter 
-far comunicare tra loro moduli scritti in TLM, con moduli scritti in AMS e viceversa. Il modulo Valve Interface inoltre,
-contiene al suo interno una parte di logica per riconoscere quando il modulo Xtea Decipher gli manda un comando oppure
-una threshold. Queste informazioni infatti, sono inviate in due momenti separati e servono per utilizzare lo stesso 
-componente per decifrare due tipologie di informazione diverse che gli vengono passate dal Controller (tramite l'Xtea
-Transactor).
+Da notare che i segnali di colore nero in figura sono segnali RTL, mentre quelli di colore arancio sono segnali AMS.
+Inoltre, i componenti Valve Interface e Tank Interface sono interfacce RTL necessarie per poter 
+far comunicare tra loro moduli scritti in TLM, con moduli scritti in AMS e viceversa, il modulo Valve Interface 
+contiene al suo interno una parte di logica per riconoscere quando l'Xtea Decipher gli invia un comando oppure una 
+threshold. Queste informazioni infatti, sono inviate in due momenti separati e servono per poter utilizzare lo stesso 
+componente in modo da decifrare due tipologie di informazione diverse che gli vengono passate.
+Infine, il Controller essendo descritto in SystemC TLM, \`e l'initiator sia del modulo Tank Transactor, sia del modulo 
+Xtea Transactor (che sono a loro volta di tipo target), poich\`e tale configurazione permette di gestire meglio la 
+sincronizzazione del loop di controllo direttamente nel controllore.
 
 
 \section{Risultati}
 
-Qua vanno ``messi i numeri''. Questa sezione dovrebbe contenere i risultati della simulazione. La simulazione mostra che 
-il sistema funziona correttamente? Come \`e stato provato? Che tipo di testbench sono stati utilizzati? Come \`e stato 
-scomposto il sistema per verificarne la correttezza?
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/water_level_heterogeneous.png}
+	\caption{Stabilizzazione dell'acqua del sistema eterogeneo}
+	\label{fig:water_heterogeneous}
+\end{figure*}
+\begin{figure*}[tb!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/rtl_signals.png}
+	\caption{Valori dei segnali nel modulo XTEA RTL}
+	\label{fig:rtl_sig}
+\end{figure*}
 
-Per quanto riguarda le performance:
-\begin{itemize}
-\item cosa si pu\`o dire in merito ai tempi di simulazione dei modelli a diversi livelli di astrazione? Quali dati 
-supportano questa affermazione? Come sono stati ottenuti i dati?
-\item Come cambia la velocit\`a di simulazione per la parte digitale e la parte a tempo continuo? Come influiscono le 
-frequenze scelte? E i livelli di astrazione? \emph{etc.}
-\end{itemize}
+La corretta funzionalit\`a del sistema \`e stata testata a partire dai singoli moduli. Questi infatti sono stati 
+sottoposti a diversi testbench per verificarne il comportamento individuale prima di poter essere integrato con gli altri
+moduli. Inoltre, in alcuni casi \`e stato necessario utilizzare anche il debugger, come ad esempio per la versione RTL di 
+XTEA che ha permesso di risolvere alcuni dei problemi legati alla sincronizzazione e scrittura sui vari segnali.
+Successivamente \`e stata testata la comunicazione tramite transazioni TLM, ad esempio per la comunicazione tra
+Controller e Xtea Transactor. 
 
-Questa sezione pu\`o contenere anche riflessioni personali sui risultati ottenuti. Importante: tutte le affermazioni 
-devono essere supportate da numeri\footnote{Richard Feynman on Scientific Method (1964) -\\ 
-https://www.youtube.com/watch?v=OL6-x0modwY}.
+Infine, il sistema eterogeneo è stato sviluppato seguendone il flusso di esecuzione utilizzando i file di tracing dei 
+segnali, che permettono di tracciare l'intero flusso rispettando per\`o i reali tempi dell'intero sistema.
+La figura~\ref{fig:rtl_sig} riporta infatti i tempi relativi all'esecuzione di un ciclo di cifratura del modulo XTEA RTL,
+che parte - nel campione di esempio - poco dopo gli 8005ms e termina dopo poco pi\`u di 2 millisecondi.
+Mettendo in relazione questo risultato con quello ottenuto dalla stabilizzazione del livello dell'acqua in 
+figura~\ref{fig:water_heterogeneous}, \`e possibile vedere infatti, oltre all'evidente stabilizzazione del livello ad un
+valore pari a 8.5 c.a., un'esecuzione del modulo RTL molto pi\`u veloce rispetto all'intero sistema nel suo complesso.
+
+In riferimento ai tempi di simulazione invece, poich\'e per una co-simulazione di diversi modelli descritti a diversi 
+livelli di astrazione \`e richiesta una maggiore complessit\`a di sincronizzazione, l'esecuzione totale dell'intero 
+sistema risulta essere piuttosto lenta. Questo perch\'e occorre sincronizzare i moduli TLM che sono meno accurati e che 
+permettono per\`o una simulazione pi\`u veloce, con il modulo XTEA RTL, che, come gi\`a visto in tabella \ref{tab:time} 
+richiede pi\`u tempo di simulazione dovuto alla loro maggior precisione.
+
 
 \section{Conclusioni}
-Le conclusioni dovrebbero riassumere in poche righe  tutto ci\`o che \`e stato fatto. Un paio di righe descrivono i 
-risultati osservati, in modo da introdurre poi la conclusione ``vera e propria''. Nel caso del corso, la ``lezione da 
-portare a casa'' sar\`a quello che si \`e imparato svolgendo l'elaborato.
+Il riuso dei vari componenti per ridurre il cosidetto TTM (Time to Market) permette di costruire in breve tempo un 
+prototipo da simulare per poter studiare la fattibilit\`a del progetto nel suo complesso. In particolare, grazie 
+all'utilizzo di SystemC \`e stato possibile modellare sia componenti analogiche (a tempo continuo e a tempo discreto), sia 
+componenti digitali ed eseguirne una simulazione dell'intero sistema. Questo vantaggio  si \`e mostrato rilevante 
+considerando un'eventuale progettazione classica del sistema, in cui si sarebbe dovuto suddividere la parte di 
+progettazione hw da quella sw (che ovviamente non sarebbe stata altrettanto fattibile).
 
 
 \bibliographystyle{IEEEtran}
 \bibliography{biblio}
 
-\appendix
 \begin{figure*}[bt]
 	\centering
 	\includegraphics[width=0.7\textwidth]{figures/efsm.pdf}
 	\caption{EFSM del modulo XTEA RTL}
 	\label{fig:efsm}
 \end{figure*}
-\begin{figure*}[bt]
-	\centering
-	\includegraphics[width=0.7\textwidth]{figures/heterogeneous.pdf}
-	\caption{Struttura del heterogeneous platform}
-	\label{fig:heterogeneous}
-\end{figure*}
-
-Se non avete abbastanza spazio, potete inserire le figure delle EFSM in una  pagina extra, appendice. Un esempio di come 
-potete fare solo le Figure~\ref{fig:grande}, \ref{fig:piccola1}, \ref{fig:piccola2}.
 
 \end{document}
