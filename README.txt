@@ -7,3 +7,6 @@ Per compilare i vari sottomoduli è possibile utilizzare CMAKE (CmakeLists.txt p
  - hw_subsystem_UT.x
 
 oppure i Makefile (uno per ogni sottomodulo presenti nelle relative sottodirectory), generando gli stessi eseguibili del CMAKE.
+
+Nota: compilando con i Makefile, in caso di errore creare le directory obj e bin con il seguente comando:
+```mkdir obj bin```
