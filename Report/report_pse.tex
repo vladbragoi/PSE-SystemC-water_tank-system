@@ -75,11 +75,11 @@ a diversi livelli di astrazione. In particolare, i livelli di astrazione utilizz
     esegue i calcoli e le operazioni aritmetiche/logiche (\textit{datapath}).
     
     \item SystemC\cite{SystemC} TLM (Transaction-level Modeling), che permette di descrivere come i vari moduli 
-    interagiscono tra loro, grazie ai diversi stili messi a disposizione dalla libreria, ovvero TLM AT (approximately-
-    timed) e TLM LT (loosely-timed) per una sincronizzazione basata su chiamate non bloccanti e/o basata sul concetto 
-    del temporal decoupling rispettivamente, per arrivare ad una sincronizzazione a chiamate bloccanti in cui non si 
-    tiene traccia del tempo di simulazione, e dunque molto pi\`u vicina ad una descrizione algoritmica, coincidente con 
-    lo stile TLM UT (untimed).
+    interagiscono tra loro, grazie ai diversi stili messi a disposizione dalla libreria, ovvero TLM AT 
+    (approximately-timed) e TLM LT (loosely-timed) per una sincronizzazione basata su chiamate non bloccanti e/o basata 
+    sul concetto del temporal decoupling rispettivamente ai due stili, per arrivare ad una sincronizzazione a chiamate 
+    bloccanti in cui non si tiene traccia del tempo di simulazione, e dunque molto pi\`u vicina ad una descrizione 
+    algoritmica, coincidente con lo stile TLM UT (untimed).
     
     \item SystemC AMS\cite{AMS} (Analog/Mixed-Signal), che permette di modellare componenti analogiche e/o mixed-signal 
     utilizzando diversi tipi di formalismi quali TDF (Timed Data Flow) per una modellazione non conservativa di sistemi 
@@ -104,13 +104,13 @@ n C/C++ \`e stato possibile ricavare la seguente struttura di base:
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\columnwidth]{figures/xtea.pdf}
-	\caption{Rappresentazione del modulo XTEA}
+	\caption{Struttura generale del modulo XTEA}
     \label{fig:xtea}
 \end{figure}
 
 Di seguito vengono descritti i diversi livelli di astrazione in cui il modulo \`e stato implementato:
 \begin{itemize}
-    \item XTEA RTL, descritto in SystemC RTL, \`e stato progettato suddividendo (secondo quanto detto precedentemente) 
+    \item XTEA RTL, descritto in SystemC RTL, \`e stato progettato suddividendo (in base a quanto detto precedentemente) 
     la parte di controllo dalla parte relativa ai calcoli. In figura~\ref{fig:fsmd} vengono presentate le porte di 
     ingresso e di uscita del modulo e i segnali che interconnettono l'FSM al Datapath. In particolare, l'FSM è sensibile
     alle variazioni sul segnale \state{din\_rdy} e \state{status}, mentre utilizza \state{mode} e \state{counter} per 
@@ -154,8 +154,9 @@ Di seguito vengono descritti i diversi livelli di astrazione in cui il modulo \`
     \code{tlm\_fw\_transport\_if}), avviando transazioni per permettere lo scambio di messaggi, che in questo caso, 
     corrispondono all'invio dei dati da cifrare/decifrare. In particolare, ad ogni transazione viene inviato un payload 
     esteso, ovvero un payload con allegate le informazioni definite nella struttura \code{iostruct}, che racchiude gli 
-    input e gli output definiti nella rappresentazione in figura~\ref{fig:xtea}. 
+    input e gli output definiti nella struttura generica del modulo in figura~\ref{fig:xtea}. 
     
+    Di seguito vengono presentate le diverse versioni, dalla pi\`u specifica alla pi\`u astratta:
     \begin{itemize}
         \item TLM Aproximately Timed (4 phases), è la versione basata su chiamate non bloccanti. La sincronizzazione 
         avviane secondo il classico protocollo di handshake a 4 fasi, in particolare il \emph{testbench} invia i dati 
@@ -291,15 +292,16 @@ interconnessione tra i singoli moduli:
     \item da AMS a RTL e nuovamente a TLM, per i segnali in uscita dal modulo Tank (in AMS) ed entranti nel modulo 
     Controller (descritto in TLM);
 \end{itemize}
-Da notare che i segnali di colore nero in figura sono segnali RTL, mentre quelli di colore arancio sono segnali AMS.
+Da notare che i segnali di colore nero in figura sono segnali RTL, mentre quelli di colore arancio sono segnali AMS. 
+Invece i segnali rappresentati dalle frecce tratteggiate rappresentano transazioni TLM.
 Inoltre, i componenti Valve Interface e Tank Interface sono interfacce RTL necessarie per poter 
-far comunicare tra loro moduli scritti in TLM, con moduli scritti in AMS e viceversa, il modulo Valve Interface 
+far comunicare tra loro moduli scritti in TLM, con moduli scritti in AMS e viceversa, mentre il modulo Valve Interface 
 contiene al suo interno una parte di logica per riconoscere quando l'Xtea Decipher gli invia un comando oppure una 
 threshold. Queste informazioni infatti, sono inviate in due momenti separati e servono per poter utilizzare lo stesso 
 componente in modo da decifrare due tipologie di informazione diverse che gli vengono passate.
 Infine, il Controller essendo descritto in SystemC TLM, \`e l'initiator sia del modulo Tank Transactor, sia del modulo 
 Xtea Transactor (che sono a loro volta di tipo target), poich\`e tale configurazione permette di gestire meglio la 
-sincronizzazione del loop di controllo direttamente nel controllore.
+sincronizzazione del loop di controllo direttamente nel modulo Controller.
 
 
 \section{Risultati}
@@ -325,18 +327,21 @@ Successivamente \`e stata testata la comunicazione tramite transazioni TLM, ad e
 Controller e Xtea Transactor. 
 
 Infine, il sistema eterogeneo è stato sviluppato seguendone il flusso di esecuzione utilizzando i file di tracing dei 
-segnali, che permettono di tracciare l'intero flusso rispettando per\`o i reali tempi dell'intero sistema.
-La figura~\ref{fig:rtl_sig} riporta infatti i tempi relativi all'esecuzione di un ciclo di cifratura del modulo XTEA RTL,
-che parte - nel campione di esempio - poco dopo gli 8005ms e termina dopo poco pi\`u di 2 millisecondi.
+segnali, che permettono di tracciare l'intero flusso rispettando per\`o i reali tempi di esecuzione dell'intero sistema.
+La figura~\ref{fig:rtl_sig} riporta infatti i tempi relativi all'esecuzione di un ciclo di decifratura del modulo XTEA RTL,
+che impiega - come ben visibile in figura - poco pi\`u di 2 millisecondi.
 Mettendo in relazione questo risultato con quello ottenuto dalla stabilizzazione del livello dell'acqua in 
 figura~\ref{fig:water_heterogeneous}, \`e possibile vedere infatti, oltre all'evidente stabilizzazione del livello ad un
-valore pari a 8.5 c.a., un'esecuzione del modulo RTL molto pi\`u veloce rispetto all'intero sistema nel suo complesso.
+valore pari a 8.5 c.a., che l'esecuzione modulo RTL \`e molto pi\`u veloce rispetto agli altri moduli del sistema (questo
+perché il modulo lavora alla frequenza del clock essendo il componente descritto a pi\`u basso livello di astrazione,
+quindi pi\`u vicino all'hardware).
 
 In riferimento ai tempi di simulazione invece, poich\'e per una co-simulazione di diversi modelli descritti a diversi 
 livelli di astrazione \`e richiesta una maggiore complessit\`a di sincronizzazione, l'esecuzione totale dell'intero 
 sistema risulta essere piuttosto lenta. Questo perch\'e occorre sincronizzare i moduli TLM che sono meno accurati e che 
 permettono per\`o una simulazione pi\`u veloce, con il modulo XTEA RTL, che, come gi\`a visto in tabella \ref{tab:time} 
-richiede pi\`u tempo di simulazione dovuto alla loro maggior precisione.
+richiede pi\`u tempo di simulazione dovuto alla sua maggior precisione (poich\'e viene simulato il comportamento del modulo ad
+ogni ciclo di clock).
 
 
 \section{Conclusioni}
