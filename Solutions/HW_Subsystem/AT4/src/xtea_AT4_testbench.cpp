@@ -4,20 +4,6 @@
 
 #include "xtea_AT4_testbench.h"
 
-<<<<<<< HEAD
-void xtea_AT4_testbench::invalidate_direct_mem_ptr(uint64 start_range, uint64 end_range)
-{
-}
-
-tlm::tlm_sync_enum xtea_AT4_testbench::nb_transport_bw(
-    tlm::tlm_generic_payload &trans,
-    tlm::tlm_phase &phase,
-    sc_time &t)
-{
-
-    if (!response_pending)
-    {
-=======
 void xtea_AT4_testbench::invalidate_direct_mem_ptr(uint64 start_range, uint64 end_range) {}
 
 tlm::tlm_sync_enum xtea_AT4_testbench::nb_transport_bw(
@@ -26,17 +12,11 @@ tlm::tlm_sync_enum xtea_AT4_testbench::nb_transport_bw(
         sc_time &t) {
 
     if (!response_pending) {
->>>>>>> PSE-univr-project/master
         trans.set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
         return tlm::TLM_COMPLETED;
     }
 
-<<<<<<< HEAD
-    if (phase != tlm::BEGIN_RESP)
-    { // phase should be BEGIN_RESP
-=======
     if (phase != tlm::BEGIN_RESP) { // phase should be BEGIN_RESP
->>>>>>> PSE-univr-project/master
         trans.set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
         return tlm::TLM_COMPLETED;
     }
@@ -47,12 +27,7 @@ tlm::tlm_sync_enum xtea_AT4_testbench::nb_transport_bw(
     return tlm::TLM_COMPLETED;
 }
 
-<<<<<<< HEAD
-void xtea_AT4_testbench::run()
-{
-=======
 void xtea_AT4_testbench::run() {
->>>>>>> PSE-univr-project/master
 
     tlm::tlm_generic_payload payload;
     tlm::tlm_sync_enum result;
@@ -71,34 +46,19 @@ void xtea_AT4_testbench::run() {
     // Sending data to target
     phase = tlm::BEGIN_REQ;
     payload.set_address(0);
-<<<<<<< HEAD
-    payload.set_data_ptr((unsigned char *)&xtea_packet);
-=======
     payload.set_data_ptr((unsigned char *) &xtea_packet);
->>>>>>> PSE-univr-project/master
     payload.set_write();
 
     result = initiator_socket->nb_transport_fw(payload, phase, local_time);
 
-<<<<<<< HEAD
-    if (result == tlm::TLM_COMPLETED)
-    {
-=======
     if (result == tlm::TLM_COMPLETED) {
->>>>>>> PSE-univr-project/master
         // Something gone wrong!
         printf("Transaction error: forcing simulation stop.\n");
         sc_stop();
     }
 
-<<<<<<< HEAD
-    if (phase != tlm::END_REQ)
-    {
-        printf("Unexcepted protocop phase: forcing simulation stop.\n");
-=======
     if (phase != tlm::END_REQ) {
         printf("Unexpected protocol phase: forcing simulation stop.\n");
->>>>>>> PSE-univr-project/master
         sc_stop();
     }
 
@@ -107,12 +67,7 @@ void xtea_AT4_testbench::run() {
     wait(available_response);
     response_pending = false;
 
-<<<<<<< HEAD
-    if (payload.get_response_status() == tlm::TLM_OK_RESPONSE)
-    {
-=======
     if (payload.get_response_status() == tlm::TLM_OK_RESPONSE) {
->>>>>>> PSE-univr-project/master
         printf("First invocation:\n");
         cout << "\t- the encryption of " << hex << xtea_packet.word0 << " and "
              << hex << xtea_packet.word1 << endl;
@@ -122,12 +77,7 @@ void xtea_AT4_testbench::run() {
              << hex << xtea_packet.key2
              << hex << xtea_packet.key3 << endl;
         cout << "is: " << hex << xtea_packet.result0 << ", " << hex << xtea_packet.result1 << endl;
-<<<<<<< HEAD
-        if ((xtea_packet.result0 != 0x99bbb92b) || (xtea_packet.result1 != 0x3ebd1644))
-        {
-=======
         if ((xtea_packet.result0 != 0x99bbb92b) || (xtea_packet.result1 != 0x3ebd1644)) {
->>>>>>> PSE-univr-project/master
             printf("Wrong result!\n");
         }
     }
@@ -145,23 +95,13 @@ void xtea_AT4_testbench::run() {
 
     result = initiator_socket->nb_transport_fw(payload, phase, local_time);
 
-<<<<<<< HEAD
-    if (result == tlm::TLM_COMPLETED)
-    {
-=======
     if (result == tlm::TLM_COMPLETED) {
->>>>>>> PSE-univr-project/master
         // Something gone wrong!
         printf("Transaction error: forcing simulation stop.\n");
         sc_stop();
     }
 
-<<<<<<< HEAD
-    if (phase != tlm::END_REQ)
-    {
-=======
     if (phase != tlm::END_REQ) {
->>>>>>> PSE-univr-project/master
         printf("Unexcepted protocop phase: forcing simulation stop.\n");
         sc_stop();
     }
@@ -170,12 +110,7 @@ void xtea_AT4_testbench::run() {
     wait(available_response);
     response_pending = false;
 
-<<<<<<< HEAD
-    if (payload.get_response_status() == tlm::TLM_OK_RESPONSE)
-    {
-=======
     if (payload.get_response_status() == tlm::TLM_OK_RESPONSE) {
->>>>>>> PSE-univr-project/master
         printf("\nSecond invocation:\n");
         cout << "\t- the decryption of " << hex << xtea_packet.word0 << " and "
              << hex << xtea_packet.word1 << endl;
@@ -185,12 +120,7 @@ void xtea_AT4_testbench::run() {
              << hex << xtea_packet.key2
              << hex << xtea_packet.key3 << endl;
         cout << "is: " << hex << xtea_packet.result0 << ", " << hex << xtea_packet.result1 << endl;
-<<<<<<< HEAD
-        if ((xtea_packet.result0 != 0x12345678) || (xtea_packet.result1 != 0x9abcdeff))
-        {
-=======
         if ((xtea_packet.result0 != 0x12345678) || (xtea_packet.result1 != 0x9abcdeff)) {
->>>>>>> PSE-univr-project/master
             printf("Wrong result!\n");
         }
     }
@@ -201,12 +131,7 @@ void xtea_AT4_testbench::run() {
 }
 
 xtea_AT4_testbench::xtea_AT4_testbench(sc_module_name name) : sc_module(name),
-<<<<<<< HEAD
-                                                              response_pending(false)
-{
-=======
                                                               response_pending(false) {
->>>>>>> PSE-univr-project/master
     initiator_socket(*this);
 
     SC_THREAD(run);

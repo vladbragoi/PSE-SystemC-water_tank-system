@@ -1,12 +1,7 @@
 #include <xtea_RTL_testbench.h>
 #include "xtea_RTL.h"
 
-<<<<<<< HEAD
-int sc_main(int argc, char *argv[])
-{
-=======
 int sc_main(int argc, char *argv[]) {
->>>>>>> PSE-univr-project/master
 
     sc_signal<sc_logic> clk;
 

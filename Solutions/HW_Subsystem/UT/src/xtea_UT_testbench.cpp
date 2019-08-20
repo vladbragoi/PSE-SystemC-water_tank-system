@@ -4,22 +4,6 @@
 
 #include "xtea_UT_testbench.h"
 
-<<<<<<< HEAD
-void xtea_UT_testbench::invalidate_direct_mem_ptr(uint64 start_range, uint64 end_range)
-{
-}
-
-tlm::tlm_sync_enum xtea_UT_testbench::nb_transport_bw(
-    tlm::tlm_generic_payload &trans,
-    tlm::tlm_phase &phase,
-    sc_time &t)
-{
-    return tlm::TLM_COMPLETED;
-}
-
-void xtea_UT_testbench::run()
-{
-=======
 void xtea_UT_testbench::invalidate_direct_mem_ptr(uint64 start_range, uint64 end_range) {
 }
 
@@ -31,7 +15,6 @@ tlm::tlm_sync_enum xtea_UT_testbench::nb_transport_bw(
 }
 
 void xtea_UT_testbench::run() {
->>>>>>> PSE-univr-project/master
 
     sc_time local_time;
 
@@ -46,11 +29,7 @@ void xtea_UT_testbench::run() {
     xtea_packet.key3 = 0xb4bd6e46;
     xtea_packet.mode = false;
 
-<<<<<<< HEAD
-    payload.set_data_ptr((unsigned char *)&xtea_packet);
-=======
     payload.set_data_ptr((unsigned char *) &xtea_packet);
->>>>>>> PSE-univr-project/master
     payload.set_address(0);
     payload.set_write();
 
@@ -65,17 +44,9 @@ void xtea_UT_testbench::run() {
          << hex << xtea_packet.key2
          << hex << xtea_packet.key3 << endl;
 
-<<<<<<< HEAD
-    if (payload.get_response_status() == tlm::TLM_OK_RESPONSE)
-    {
-        cout << "is: " << hex << xtea_packet.result0 << ", " << hex << xtea_packet.result1 << endl;
-        if ((xtea_packet.result0 != 0x99bbb92b) || (xtea_packet.result1 != 0x3ebd1644))
-        {
-=======
     if (payload.get_response_status() == tlm::TLM_OK_RESPONSE) {
         cout << "is: " << hex << xtea_packet.result0 << ", " << hex << xtea_packet.result1 << endl;
         if ((xtea_packet.result0 != 0x99bbb92b) || (xtea_packet.result1 != 0x3ebd1644)) {
->>>>>>> PSE-univr-project/master
             printf("Wrong result!\n");
         }
     }
@@ -88,11 +59,7 @@ void xtea_UT_testbench::run() {
     xtea_packet.key3 = 0xb4bd6e46;
     xtea_packet.mode = true;
 
-<<<<<<< HEAD
-    payload.set_data_ptr((unsigned char *)&xtea_packet);
-=======
     payload.set_data_ptr((unsigned char *) &xtea_packet);
->>>>>>> PSE-univr-project/master
     payload.set_address(0);
     payload.set_write();
 
@@ -107,17 +74,9 @@ void xtea_UT_testbench::run() {
          << hex << xtea_packet.key2
          << hex << xtea_packet.key3 << endl;
 
-<<<<<<< HEAD
-    if (payload.get_response_status() == tlm::TLM_OK_RESPONSE)
-    {
-        cout << "is: " << hex << xtea_packet.result0 << ", " << hex << xtea_packet.result1 << endl;
-        if ((xtea_packet.result0 != 0x12345678) || (xtea_packet.result1 != 0x9abcdeff))
-        {
-=======
     if (payload.get_response_status() == tlm::TLM_OK_RESPONSE) {
         cout << "is: " << hex << xtea_packet.result0 << ", " << hex << xtea_packet.result1 << endl;
         if ((xtea_packet.result0 != 0x12345678) || (xtea_packet.result1 != 0x9abcdeff)) {
->>>>>>> PSE-univr-project/master
             printf("Wrong result!\n");
         }
     }
@@ -127,12 +86,7 @@ void xtea_UT_testbench::run() {
     sc_stop();
 }
 
-<<<<<<< HEAD
-xtea_UT_testbench::xtea_UT_testbench(sc_module_name name) : sc_module(name)
-{
-=======
 xtea_UT_testbench::xtea_UT_testbench(sc_module_name name) : sc_module(name) {
->>>>>>> PSE-univr-project/master
     initiator_socket(*this);
 
     SC_THREAD(run);

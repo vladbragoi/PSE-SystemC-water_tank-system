@@ -4,12 +4,7 @@
 
 #pragma once
 
-<<<<<<< HEAD
-typedef enum
-{
-=======
 typedef enum {
->>>>>>> PSE-univr-project/master
     IDLE,
     CLOSE,
     OPEN
