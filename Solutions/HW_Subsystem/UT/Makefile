@@ -1,7 +1,11 @@
 DESIGN_NAME=xtea
 ABSTRACTION_LEVEL=UT
 
+<<<<<<< HEAD
 EXECUTABLE=bin/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).x
+=======
+EXECUTABLE=bin/hw_subsystem_UT.x
+>>>>>>> PSE-univr-project/master
 
 SYSTEMC=$$SYSTEMC_HOME
 
@@ -32,6 +36,7 @@ all: $(EXECUTABLE)
 
 $(EXECUTABLE): obj/main_$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL)_testbench.o obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o
 	@echo Building $@
+<<<<<<< HEAD
 	$(CXX) -g $(INCDIR) -o $@ $^ $(LIBDIR)/libsystemc.a -lpthread
 
 obj/main_$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o: src/main_$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).cpp
@@ -45,6 +50,21 @@ obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL)_testbench.o: src/$(DESIGN_NAME)_$(ABSTRA
 obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o: src/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).cpp include/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).h
 	@echo Building $@
 	$(CXX) -g $(CFLAGS) $(INCDIR) -o $@ $<
+=======
+	@$(CXX) -g $(INCDIR) -o $@ $^ $(LIBDIR)/libsystemc.a -lpthread
+
+obj/main_$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o: src/main_$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).cpp
+	@echo Building $@
+	@$(CXX) -g $(CFLAGS) $(INCDIR) -o $@ $< 
+
+obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL)_testbench.o: src/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL)_testbench.cpp include/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL)_testbench.h
+	@echo Building $@
+	@$(CXX) -g $(CFLAGS) $(INCDIR) -o $@ $< 
+
+obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o: src/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).cpp include/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).h
+	@echo Building $@
+	@$(CXX) -g $(CFLAGS) $(INCDIR) -o $@ $<
+>>>>>>> PSE-univr-project/master
 
 
 clean:

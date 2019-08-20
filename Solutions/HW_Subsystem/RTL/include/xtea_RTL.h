@@ -7,8 +7,12 @@
 #include <systemc.h>
 
 // SystemC struct
+<<<<<<< HEAD
 SC_MODULE(xtea_RTL)
 {
+=======
+SC_MODULE(xtea_RTL) {
+>>>>>>> PSE-univr-project/master
 
     // INPUTS
     sc_in<sc_logic> clk;
@@ -38,8 +42,12 @@ SC_MODULE(xtea_RTL)
      *  - ST_SUM    -> update `sum` variable
      *  - ST_WRITE  -> write the result to the output variable
      */
+<<<<<<< HEAD
     typedef enum
     {
+=======
+    typedef enum {
+>>>>>>> PSE-univr-project/master
         RESET,
         ST_READ,
         ST_M0,
@@ -56,6 +64,7 @@ SC_MODULE(xtea_RTL)
     /**
      * Internal variables
      */
+<<<<<<< HEAD
     sc_signal<sc_uint<32>> k;       // choose which 32-bit key to select
     sc_signal<sc_uint<32>> key;     // store the key selected
     sc_signal<sc_uint<32>> delta;   // store the delta value
@@ -63,6 +72,15 @@ SC_MODULE(xtea_RTL)
     sc_signal<sc_uint<32>> counter; // counter variable
     sc_uint<32> v0;                 // v0 temp variable
     sc_uint<32> v1;                 // v1 temp variable
+=======
+    sc_signal<sc_uint<2>> k;       /// choose which 32-bit key to select
+    sc_signal<sc_uint<32>> key;     /// store the key selected
+    sc_signal<sc_uint<32>> delta;   /// store the delta value
+    sc_signal<sc_uint<64>> sum;     /// sum variable
+    sc_signal<sc_uint<7>> counter; /// counter variable
+    sc_signal<sc_uint<32>> v0;      /// v0 temp variable
+    sc_signal<sc_uint<32>> v1;      /// v1 temp variable
+>>>>>>> PSE-univr-project/master
 
     /**
      * FSM: the     
@@ -75,8 +93,12 @@ SC_MODULE(xtea_RTL)
     void datapath();
 
     // SystemC module constructor
+<<<<<<< HEAD
     SC_CTOR(xtea_RTL)
     {
+=======
+    SC_CTOR(xtea_RTL) {
+>>>>>>> PSE-univr-project/master
         SC_METHOD(fsm);
         sensitive << STATUS;
         sensitive << din_rdy;
