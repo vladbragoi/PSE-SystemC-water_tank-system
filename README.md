@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 # PSE-SystemC-water_tank-system
-=======
+
 *Water Tank System*
 
 Per compilare i vari sottomoduli è possibile utilizzare CMAKE (CmakeLists.txt presente nella directory Solutions), generando i seguenti eseguibili:
@@ -15,4 +14,3 @@ oppure i Makefile (uno per ogni sottomodulo presenti nelle relative sottodirecto
 
 Nota: compilando con i Makefile, in caso di errore creare le directory obj e bin con il seguente comando:
 ```mkdir obj bin```
->>>>>>> PSE-univr-project/master
